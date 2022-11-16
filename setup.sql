@@ -1,0 +1,25 @@
+USE master;
+
+IF DB_ID ('USERS') IS NOT NULL DROP DATABASE USERS;
+
+IF @@ERROR = 3702
+   RAISERROR ('Database cannot be dropped because there are still open connections.', 127, 127)
+   WITH NOWAIT, LOG;
+
+
+CREATE DATABASE USERS;
+
+GO
+
+USE USERS;
+
+GO
+CREATE SCHEMA LOGIN AUTHORIZATION dbo;
+GO
+
+CREATE TABLE LOGIN.DATA
+(
+    UserID INT IDENTITY(1,1) NOT NULL,
+    PasswordHash BINARY(64) NOT NULL,
+    CONSTRAINT [PK_User_UserID] PRIMARY KEY CLUSTERED (UserID ASC)
+)
